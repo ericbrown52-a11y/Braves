@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Council Grove Braves 12U Baseball</title>
+<style>
+  :root{
+    --navy:#071b3a;
+    --navy2:#102f5f;
+    --silver:#cfd7e3;
+    --white:#f7f9fc;
+    --red:#c62828;
+    --grass:#1e7e48;
+    --dirt:#b1743f;
+    --ink:#061327;
+    --panel:rgba(7,27,58,.92);
+    --shadow:0 16px 40px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#071b3a 0%,#0d2a52 42%,#071b3a 100%);color:var(--white);overflow:hidden}
+  body{display:flex;justify-content:center;align-items:stretch}
+  #app{width:min(100vw,540px);height:100dvh;position:relative;overflow:hidden;background:linear-gradient(180deg,#09224a,#061327);box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+  .screen{position:absolute;inset:0;display:none;overflow:auto;padding:18px 16px 24px;background:radial-gradient(circle at top,#173b76 0,#071b3a 42%,#051022 100%)}
+  .screen.active{display:block}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff 0 9%,#d9e3ee 10% 21%,#071b3a 22% 100%);border:3px solid var(--silver);display:grid;place-items:center;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .logo:before,.logo:after{content:"";position:absolute;width:78px;height:2px;background:#c62828;transform:rotate(34deg);opacity:.85}.logo:after{transform:rotate(-34deg)}
+  .logo span{z-index:2;font-weight:1000;color:#071b3a;font-size:18px;letter-spacing:-1px;text-shadow:0 1px 0 #fff}
+  h1{font-size:25px;line-height:1.05;margin:0;font-weight:950;letter-spacing:-.8px}.sub{color:#cfd7e3;margin:4px 0 0;font-size:13px}.card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:14px;box-shadow:var(--shadow);backdrop-filter:blur(8px);margin:10px 0}.menu-grid{display:grid;gap:12px;margin-top:18px}.btn{border:0;border-radius:16px;background:linear-gradient(180deg,#fff,#dbe4ee);color:#071b3a;font-weight:900;font-size:16px;padding:14px 14px;box-shadow:0 8px 0 rgba(0,0,0,.22);min-height:48px}.btn:active{transform:translateY(3px);box-shadow:0 4px 0 rgba(0,0,0,.22)}.btn.secondary{background:linear-gradient(180deg,#224c87,#12315f);color:#fff;border:1px solid rgba(255,255,255,.18)}.btn.danger{background:linear-gradient(180deg,#e24545,#9e1c1c);color:#fff}.btn.small{font-size:13px;padding:10px 12px;min-height:38px;border-radius:12px}.btn.ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);box-shadow:none}.top-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.section-title{font-size:18px;font-weight:950;margin:16px 0 8px}.muted{color:#cfd7e3;font-size:13px;line-height:1.35}.pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:5px 9px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.14);font-size:12px;font-weight:800;color:#eaf1fb}.list{display:grid;gap:10px}.schedule-card{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.schedule-card strong{font-size:15px}.schedule-meta{font-size:12px;color:#cfd7e3;margin-top:4px}.roster-team{margin-top:14px}.player-row{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}.num{font-weight:1000;color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:5px 0;text-align:center;background:rgba(0,0,0,.18)}.ratings{font-size:11px;color:#cfd7e3;text-align:right}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0}.toggle{width:58px;height:32px;border-radius:999px;background:#1f3356;border:1px solid rgba(255,255,255,.18);position:relative}.toggle:before{content:"";position:absolute;top:3px;left:4px;width:24px;height:24px;border-radius:50%;background:#cfd7e3;transition:.18s}.toggle.on{background:#e8edf5}.toggle.on:before{left:29px;background:#071b3a}select{background:#0a244f;color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:10px;font-weight:800}.footer-note{font-size:12px;color:#aebcd1;margin-top:16px;line-height:1.4}
+
+  #screen-game{padding:0;overflow:hidden;background:#061327}.scoreboard{position:absolute;top:0;left:0;right:0;z-index:4;background:linear-gradient(180deg,rgba(6,19,39,.98),rgba(6,19,39,.76));border-bottom:1px solid rgba(255,255,255,.12);padding:8px 10px 7px}.score-line{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px}.team-score{display:flex;align-items:center;gap:6px;font-weight:950;font-size:13px}.team-score.right{justify-content:flex-end}.score-num{font-size:23px;color:#fff;line-height:1}.mid-score{text-align:center;color:#d7e0ed;font-size:11px;font-weight:850}.count-row{display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-size:12px;color:#cfd7e3}.dots{display:inline-flex;gap:3px;margin-left:4px}.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.22)}.dot.on{background:#fff}.game-card-row{position:absolute;top:72px;left:8px;right:8px;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini-card{border-radius:14px;background:rgba(7,27,58,.84);border:1px solid rgba(255,255,255,.14);padding:8px 9px;box-shadow:0 10px 24px rgba(0,0,0,.18)}.mini-label{font-size:10px;color:#aebcd1;font-weight:900;text-transform:uppercase;letter-spacing:.4px}.mini-name{font-size:13px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-stat{font-size:11px;color:#d9e3ee;margin-top:2px}#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;background:#1d7e4b}.game-log{position:absolute;top:145px;left:10px;right:10px;z-index:3;min-height:36px;pointer-events:none;text-align:center}.game-log span{display:inline-block;background:rgba(6,19,39,.78);border:1px solid rgba(255,255,255,.14);padding:7px 12px;border-radius:999px;font-weight:900;font-size:12px;color:#fff;box-shadow:0 8px 22px rgba(0,0,0,.18)}.controls{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:9px 10px 12px;background:linear-gradient(180deg,rgba(6,19,39,.1),rgba(6,19,39,.95) 22%,#061327);display:none}.controls.active{display:block}.control-grid{display:grid;gap:8px}.bat-grid{grid-template-columns:1fr 1fr 1fr}.base-grid{grid-template-columns:1fr 1fr 1fr 1fr;margin-top:8px}.pitch-layout{display:grid;grid-template-columns:1fr 126px;gap:9px;align-items:center}.pitch-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pickoff-grid{grid-template-columns:1fr 1fr 1fr;margin-top:8px}.pitch-type.selected{outline:3px solid #fff;background:linear-gradient(180deg,#e9eef6,#bec9d7)}.strike-zone{height:138px;border:3px solid rgba(255,255,255,.95);border-radius:14px;background:rgba(255,255,255,.14);position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(7,27,58,.38),0 0 18px rgba(255,255,255,.12)}.strike-zone:before,.strike-zone:after{content:"";position:absolute;inset:33.33% 0 auto 0;height:1px;background:rgba(255,255,255,.28)}.strike-zone:after{inset:66.66% 0 auto 0}.zone-v1,.zone-v2{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.28)}.zone-v1{left:33.33%}.zone-v2{left:66.66%}.target-dot{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;border:3px solid #c62828;box-shadow:0 2px 8px rgba(0,0,0,.4)}.meter-wrap{display:grid;grid-template-columns:1fr 98px;gap:8px;align-items:center;margin-top:8px}.meter{height:16px;border-radius:99px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);position:relative;overflow:hidden}.meter-perfect{position:absolute;left:43%;right:43%;top:0;bottom:0;background:rgba(255,255,255,.55)}.meter-needle{position:absolute;top:-4px;width:5px;height:24px;border-radius:4px;background:#fff;left:50%}.field-layout{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center}.joystick{width:108px;height:108px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.22);position:relative}.stick{position:absolute;width:42px;height:42px;border-radius:50%;left:31px;top:31px;background:#e8edf5;border:4px solid #071b3a;box-shadow:0 6px 20px rgba(0,0,0,.3)}.throw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.situational{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.charge-bar{height:6px;background:rgba(255,255,255,.13);border-radius:99px;overflow:hidden;margin-top:7px;display:none}.charge-fill{height:100%;width:0;background:#fff}.charge-bar.active{display:block}.aim-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}.aim-btn.selected{outline:2px solid #fff}.post-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box-table{width:100%;border-collapse:collapse;font-size:12px}.box-table th,.box-table td{padding:6px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}.box-table th{color:#cfd7e3}.statline{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  @media (orientation:landscape){#app{width:100vw;max-width:none}.game-card-row{top:58px;left:8px;right:auto;width:330px}.scoreboard{padding:6px 10px}.controls{left:auto;width:390px;top:70px;bottom:0;right:0;background:linear-gradient(90deg,rgba(6,19,39,.1),rgba(6,19,39,.96) 18%,#061327)}.game-log{top:118px;left:12px;right:410px}.pitch-layout{grid-template-columns:1fr 116px}.strike-zone{height:116px}.field-layout{grid-template-columns:100px 1fr}.joystick{width:100px;height:100px}.stick{left:29px;top:29px}.score-num{font-size:20px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <section class="screen active" id="screen-main">
+    <div class="brand"><div class="logo"><span>CG</span></div><div><h1>Council Grove Braves<br>12U Baseball</h1><p class="sub">Mobile-first playable prototype</p></div></div>
+    <div class="card"><strong>Built for quick 3-inning mobile games.</strong><p class="muted">Bat, run, pitch, field, throw to bases, and play through the full schedule against generated opponent rosters.</p></div>
+    <div class="menu-grid">
+      <button class="btn" id="quickPlayBtn">Play Game</button>
+      <button class="btn secondary" data-go="schedule">Season Schedule</button>
+      <button class="btn secondary" data-go="roster">Roster</button>
+      <button class="btn secondary" data-go="settings">Settings</button>
+    </div>
+    <p class="footer-note">Tip: In-game, tap the field to contact swing, hold Power for a harder swing, and use the pitching meter when the Braves are on defense.</p>
+  </section>
+
+  <section class="screen" id="screen-schedule">
+    <div class="top-row"><button class="btn small ghost" data-go="main">← Menu</button><span class="pill">Season Mode</span></div>
+    <h1>Schedule</h1>
+    <p class="muted">Select any matchup to start a Braves game. Home/away follows the schedule.</p>
+    <div id="scheduleList" class="list"></div>
+    <div class="card"><strong>SYAA / Ken Berry Fields</strong><p class="muted">5901 SW 61st St, Topeka, KS 66619<br>Fields used: Stallard #5 and Carver #11</p></div>
+  </section>
+
+  <section class="screen" id="screen-roster">
+    <div class="top-row"><button class="btn small ghost" data-go="main">← Menu</button><button class="btn small secondary" id="fictionRosterBtn">Fictionalize Names</button></div>
+    <h1>Rosters</h1>
+    <p class="muted">Braves roster plus full generated 12-player opponent rosters.</p>
+    <div id="rosterList"></div>
+  </section>
+
+  <section class="screen" id="screen-settings">
+    <div class="top-row"><button class="btn small ghost" data-go="main">← Menu</button><span class="pill">Game Options</span></div>
+    <h1>Settings</h1>
+    <div class="card">
+      <div class="setting-row"><div><strong>Fictionalize Braves Names</strong><p class="muted">Keeps jersey numbers but swaps player names for privacy.</p></div><button id="fictionToggle" class="toggle" aria-label="Fictionalize names"></button></div>
+      <div class="setting-row"><div><strong>Game Length</strong><p class="muted">Default is 3 innings for quick mobile play.</p></div><select id="inningsSelect"><option value="3">3 innings</option><option value="6">6 innings</option></select></div>
+      <div class="setting-row"><div><strong>Difficulty</strong><p class="muted">Changes AI discipline, fielding speed, and pitch quality.</p></div><select id="difficultySelect"><option>Easy</option><option selected>Normal</option><option>Hard</option></select></div>
+      <div class="setting-row"><div><strong>Sound Placeholders</strong><p class="muted">Simple WebAudio beeps for pitch, hit, throw, and scoring.</p></div><button id="soundToggle" class="toggle on" aria-label="Sound"></button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-game">
+    <div class="scoreboard">
+      <div class="score-line"><div class="team-score" id="awayScoreBox"></div><div class="mid-score" id="inningBox"></div><div class="team-score right" id="homeScoreBox"></div></div>
+      <div class="count-row"><div id="countBox">B 0 • S 0</div><div id="outsBox">Outs <span class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i></span></div><div id="baseBox">Bases empty</div></div>
+    </div>
+    <div class="game-card-row"><div class="mini-card"><div class="mini-label">Batter</div><div class="mini-name" id="batterName">-</div><div class="mini-stat" id="batterStats">-</div></div><div class="mini-card"><div class="mini-label">Pitcher</div><div class="mini-name" id="pitcherName">-</div><div class="mini-stat" id="pitcherStats">-</div></div></div>
+    <canvas id="gameCanvas"></canvas>
+    <div class="game-log"><span id="gameLogText">Ready.</span></div>
+
+    <div class="controls" id="batControls">
+      <div class="control-grid bat-grid">
+        <button class="btn" id="contactBtn">Contact Swing</button>
+        <button class="btn" id="powerBtn">Hold Power</button>
+        <button class="btn secondary" id="buntBtn">Bunt</button>
+      </div>
+      <div class="charge-bar" id="chargeBar"><div class="charge-fill" id="chargeFill"></div></div>
+      <div class="aim-strip"><button class="btn small secondary aim-btn" data-aim="-1">Pull</button><button class="btn small secondary aim-btn selected" data-aim="0">Center</button><button class="btn small secondary aim-btn" data-aim="1">Opposite</button></div>
+      <div class="control-grid base-grid"><button class="btn small ghost" id="advanceBtn">Advance</button><button class="btn small ghost" id="holdBtn">Hold</button><button class="btn small ghost" id="retreatBtn">Retreat</button><button class="btn small ghost" id="stealBtn">Steal</button></div>
+    </div>
+
+    <div class="controls" id="pitchControls">
+      <div class="pitch-layout"><div><div class="pitch-buttons"><button class="btn pitch-type selected" data-pitch="Fastball">Fastball</button><button class="btn pitch-type" data-pitch="Changeup">Changeup</button><button class="btn pitch-type" data-pitch="Curveball">Curveball</button><button class="btn pitch-type" data-pitch="Slider">Slider</button></div><div class="meter-wrap"><div class="meter"><div class="meter-perfect"></div><div class="meter-needle" id="meterNeedle"></div></div><button class="btn small" id="meterBtn">Start Meter</button></div></div><div><div class="strike-zone" id="targetZone"><div class="zone-v1"></div><div class="zone-v2"></div><div class="target-dot" id="targetDot" style="left:50%;top:50%"></div></div><p class="muted" style="margin:5px 0 0;text-align:center">Tap target</p></div></div>
+      <div class="control-grid pickoff-grid"><button class="btn small ghost" data-pickoff="1">Pick 1B</button><button class="btn small ghost" data-pickoff="2">Pick 2B</button><button class="btn small ghost" data-pickoff="3">Pick 3B</button></div>
+    </div>
+
+    <div class="controls" id="fieldControls">
+      <div class="field-layout"><div class="joystick" id="joystick"><div class="stick" id="stick"></div></div><div><div class="throw-grid"><button class="btn" data-throw="1">Throw 1B</button><button class="btn" data-throw="2">Throw 2B</button><button class="btn" data-throw="3">Throw 3B</button><button class="btn" data-throw="4">Throw Home</button></div><div class="situational"><button class="btn small secondary" id="cutoffBtn">Cutoff</button><button class="btn small secondary" id="diveBtn">Dive</button></div></div></div>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-postgame">
+    <div class="top-row"><button class="btn small ghost" data-go="main">← Menu</button><button class="btn small secondary" id="rematchBtn">Rematch</button></div>
+    <h1>Final</h1>
+    <div id="postgameContent"></div>
+  </section>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+// Browser safety: older mobile browsers may not support Canvas roundRect.
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+    const rr = Math.min(r, Math.abs(w)/2, Math.abs(h)/2);
+    this.beginPath();
+    this.moveTo(x+rr,y); this.arcTo(x+w,y,x+w,y+h,rr); this.arcTo(x+w,y+h,x,y+h,rr);
+    this.arcTo(x,y+h,x,y,rr); this.arcTo(x,y,x+w,y,rr); this.closePath();
+    return this;
+  };
+}
+
+// Braves roster: real names can be swapped to privacy-safe fake names with the settings toggle.
+const BRAVES_PLAYERS = [
+  {name:'Porter Brown', fakeName:'Parker Boone', number:52, batting:78, pitching:76, fielding:74, speed:71, hand:'R'},
+  {name:'Calvin Messer', fakeName:'Cal Mason', number:13, batting:72, pitching:70, fielding:76, speed:70, hand:'R'},
+  {name:'Charlie Sommer', fakeName:'Charlie Stone', number:1, batting:77, pitching:67, fielding:73, speed:83, hand:'R'},
+  {name:'Collison SanRomani', fakeName:'Colt Romano', number:7, batting:70, pitching:72, fielding:71, speed:74, hand:'R'},
+  {name:'Conner Julian', fakeName:'Connor James', number:11, batting:75, pitching:69, fielding:75, speed:68, hand:'R'},
+  {name:'James Mullins', fakeName:'Jace Miller', number:12, batting:73, pitching:65, fielding:78, speed:67, hand:'L'},
+  {name:'Jameson Johnson', fakeName:'Jett Jackson', number:5, batting:74, pitching:73, fielding:70, speed:76, hand:'R'},
+  {name:'Kason Gilliam', fakeName:'Kase Griffin', number:14, batting:71, pitching:68, fielding:72, speed:73, hand:'R'},
+  {name:'Kohen Laramore', fakeName:'Kody Lane', number:10, batting:76, pitching:71, fielding:77, speed:72, hand:'L'},
+  {name:'Kyler Ziegenhirt', fakeName:'Ky Zane', number:2, batting:69, pitching:66, fielding:74, speed:81, hand:'R'},
+  {name:'Paxton Buchman', fakeName:'Pax Buckley', number:43, batting:70, pitching:74, fielding:69, speed:66, hand:'R'},
+  {name:'Walker Schmitt', fakeName:'Wade Smith', number:3, batting:73, pitching:67, fielding:76, speed:79, hand:'R'}
+];
+
+// Full supplied season schedule. Home=true means the Braves are the home team.
+const SCHEDULE = [
+  {month:'May', date:'Wed, May 6', opponent:'Bulldogs', home:true, time:'6:00 PM', field:'Stallard #5'},
+  {month:'May', date:'Sat, May 9', opponent:'Jr. Blues', home:false, time:'11:00 AM', field:'Stallard #5'},
+  {month:'May', date:'Fri, May 15', opponent:'Midwest Miners', home:true, time:'6:00 PM', field:'Stallard #5'},
+  {month:'May', date:'Sat, May 16', opponent:'Wolverines', home:false, time:'11:00 AM', field:'Stallard #5'},
+  {month:'May', date:'Wed, May 27', opponent:'Hitmen', home:true, time:'8:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Tue, Jun 2', opponent:'Topeka Titans', home:true, time:'6:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Thu, Jun 4', opponent:'Midwest Miners', home:false, time:'8:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Fri, Jun 5', opponent:'Bulldogs', home:false, time:'6:00 PM', field:'Carver #11'},
+  {month:'June', date:'Tue, Jun 9', opponent:'Jr. Blues', home:true, time:'8:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Sat, Jun 13', opponent:'Wolverines', home:true, time:'3:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Wed, Jun 17', opponent:'Raptors', home:false, time:'6:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Mon, Jun 22', opponent:'Raptors', home:true, time:'8:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Thu, Jun 25', opponent:'Topeka Titans', home:false, time:'8:00 PM', field:'Stallard #5'},
+  {month:'June', date:'Fri, Jun 26', opponent:'Hitmen', home:false, time:'8:00 PM', field:'Carver #11'}
+];
+
+// Opponent rosters are generated from these fake name pools, then assigned ratings below.
+const OPPONENT_NAMES = {
+  'Bulldogs':['Ryder Holt','Maddox Reeves','Gavin West','Easton Cole','Brooks Turner','Nolan Briggs','Tate Lawson','Hudson Pierce','Wyatt Ford','Landon Brooks','Miles Carter','Owen Parks'],
+  'Jr. Blues':['Camden Stone','Bennett Hayes','Jaxon Reed','Levi Grant','Eli Foster','Mason Rivers','Cole Franklin','Nash Bryant','Theo Arnold','Silas Cooper','Reid Camden','Finn Wallace'],
+  'Midwest Miners':['Drew Keller','Archer Wells','Sam Booker','Tyson Clay','Brady Moss','Luke Wilder','Cade Bishop','Griffin Knox','Parker Fields','Jackson Rowe','Hayden Pike','Logan Cross'],
+  'Wolverines':['Blake Hunter','Carson Vaughn','Dylan Mercer','Rhett Warren','Micah Dale','Henry Collins','Austin Reed','Knox Martin','Max Chandler','Zane Brooks','Liam Russell','Cooper Lane'],
+  'Hitmen':['Jude Slater','Axel Hart','Rocco Dean','Milo Nash','Kellan Rhodes','Brody King','Jace Turner','Cash Monroe','Beckett Fox','Trevor Hall','Jayden Sharp','Lincoln Ward'],
+  'Topeka Titans':['Evan Porter','Sawyer Boone','Carter James','Brock Hudson','Grayson Tate','Dominic Cruz','Tyler Shaw','Dawson Banks','Asher Price','Kai Simmons','Miles Donovan','Nico Sanders'],
+  'Raptors':['Rowan Drake','Aiden Talon','Leo Hawk','Gunner Stone','Bentley Cole','Brantley Ray','Jonah Brooks','Maverick Finch','Cohen Steele','Kade Walker','Jett Palmer','Roman Hart']
+};
+
+const OPPONENTS = Object.fromEntries(Object.keys(OPPONENT_NAMES).map((team, tIndex) => {
+  const players = OPPONENT_NAMES[team].map((name, i) => {
+    const seed = (tIndex + 3) * 19 + i * 11 + name.length;
+    const number = [4,8,9,15,17,21,22,24,27,32,34,44][i] + (tIndex % 3);
+    return {
+      name,
+      fakeName:name,
+      number,
+      batting:58 + ((seed * 7) % 29),
+      pitching:54 + ((seed * 5) % 31),
+      fielding:56 + ((seed * 3) % 30),
+      speed:55 + ((seed * 9) % 32),
+      hand: ((seed + i) % 5 === 0 ? 'L' : 'R')
+    };
+  });
+  return [team, players];
+}));
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const clamp = (v, min=0, max=1) => Math.max(min, Math.min(max, v));
+const rand = (min, max) => min + Math.random() * (max - min);
+const choose = arr => arr[Math.floor(Math.random() * arr.length)];
+
+// Gameplay tuning constants. These make youth-baseball close plays feel playable
+// on touch screens instead of punishing the user the instant a runner touches a bag.
+const CLOSE_PLAY_WINDOW = 1500;
+const USER_FIELDING_SETTLE_MS = 10800;
+const AUTO_THROW_AFTER_SECURE_MS = 1900;
+const AI_FIELDING_SETTLE_MS = 5200;
+
+let settings = {
+  fictionalize:false,
+  innings:3,
+  difficulty:'Normal',
+  sound:true
+};
+let selectedSchedule = SCHEDULE[0];
+let game = null;
+let raf = null;
+let lastT = performance.now();
+let audioCtx = null;
+
+const canvas = $('#gameCanvas');
+const ctx = canvas.getContext('2d');
+let CW = 390, CH = 760, DPR = 1;
+
+function beep(type='tap'){
+  if(!settings.sound) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    const map = {pitch:360, hit:150, throw:520, score:760, out:210, tap:430};
+    o.frequency.value = map[type] || 430;
+    o.type = type === 'hit' ? 'triangle' : 'sine';
+    g.gain.value = 0.0001;
+    o.connect(g); g.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    g.gain.exponentialRampToValueAtTime(type === 'hit' ? .09 : .045, now + .01);
+    g.gain.exponentialRampToValueAtTime(.0001, now + (type === 'hit' ? .18 : .08));
+    o.start(now); o.stop(now + .2);
+  }catch(e){}
+}
+
+function showScreen(name){
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  $(`#screen-${name}`).classList.add('active');
+  if(name !== 'game') stopLoop();
+  if(name === 'schedule') renderSchedule();
+  if(name === 'roster') renderRosters();
+  if(name === 'settings') renderSettings();
+}
+
+function makeTeam(name, roster, isUser=false){
+  return {name, short:name === 'Council Grove Braves' ? 'Braves' : name, roster:roster.map(p => ({...p})), isUser};
+}
+function displayName(player, team){
+  if(team && team.isUser && settings.fictionalize) return player.fakeName || player.name;
+  return player.name;
+}
+function playerLine(player){return `#${player.number} • B${player.batting} P${player.pitching} F${player.fielding} S${player.speed} • ${player.hand}`;}
+
+function renderSchedule(){
+  const list = $('#scheduleList');
+  list.innerHTML = '';
+  let currentMonth = '';
+  SCHEDULE.forEach((g, idx) => {
+    if(g.month !== currentMonth){
+      currentMonth = g.month;
+      const h = document.createElement('div');
+      h.className = 'section-title';
+      h.textContent = currentMonth;
+      list.appendChild(h);
+    }
+    const card = document.createElement('div');
+    card.className = 'card schedule-card';
+    card.innerHTML = `<div><strong>${g.date} ${g.home ? 'vs' : '@'} ${g.opponent}</strong><div class="schedule-meta">${g.time} • ${g.field} • SYAA / Ken Berry Fields</div></div><button class="btn small">Play</button>`;
+    card.querySelector('button').addEventListener('click', () => startGame(SCHEDULE[idx]));
+    list.appendChild(card);
+  });
+}
+
+function renderRosters(){
+  const root = $('#rosterList');
+  root.innerHTML = '';
+  const teams = [['Council Grove Braves', BRAVES_PLAYERS, true], ...Object.keys(OPPONENTS).map(n => [n, OPPONENTS[n], false])];
+  teams.forEach(([teamName, roster, isUser]) => {
+    const team = makeTeam(teamName, roster, isUser);
+    const div = document.createElement('div');
+    div.className = 'card roster-team';
+    div.innerHTML = `<h2 style="margin:0 0 8px;font-size:18px">${teamName}</h2>` + team.roster.map(p => `<div class="player-row"><div class="num">#${p.number}</div><div><strong>${displayName(p, team)}</strong><div class="muted">${p.hand}-handed</div></div><div class="ratings">BAT ${p.batting}<br>PIT ${p.pitching} • FLD ${p.fielding}<br>SPD ${p.speed}</div></div>`).join('');
+    root.appendChild(div);
+  });
+  $('#fictionRosterBtn').textContent = settings.fictionalize ? 'Show Real Names' : 'Fictionalize Names';
+}
+
+function renderSettings(){
+  $('#fictionToggle').classList.toggle('on', settings.fictionalize);
+  $('#soundToggle').classList.toggle('on', settings.sound);
+  $('#inningsSelect').value = String(settings.innings);
+  $('#difficultySelect').value = settings.difficulty;
+}
+
+function setLog(text){
+  if(!game) return;
+  game.log = text;
+  $('#gameLogText').textContent = text;
+}
+
+function statKey(team, p){ return `${team.name}|${p.number}|${p.name}`; }
+function ensureStat(team, p){
+  const key = statKey(team,p);
+  if(!game.stats[key]) game.stats[key] = {team:team.short, name:displayName(p,team), number:p.number, AB:0,H:0,R:0,RBI:0,HR:0,K:0,BB:0,PC:0,RA:0,E:0};
+  return game.stats[key];
+}
+function addPitchCount(team, pitcher){ ensureStat(team,pitcher).PC++; }
+function pitcherStamina(team){
+  if(!game) return 100;
+  const p = team.pitcher;
+  const pc = ensureStat(team,p).PC;
+  return clamp(100 - pc * 1.55, 20, 100);
+}
+function difficultyMod(){
+  return settings.difficulty === 'Easy' ? -.12 : settings.difficulty === 'Hard' ? .13 : 0;
+}
+
+// Creates a fresh playable game state. Stats are session-scoped by design;
+// game.stats is intentionally shaped so it can be serialized to localStorage later.
+function startGame(scheduleItem){
+  selectedSchedule = scheduleItem || SCHEDULE[0];
+  const braves = makeTeam('Council Grove Braves', BRAVES_PLAYERS, true);
+  const opp = makeTeam(selectedSchedule.opponent, OPPONENTS[selectedSchedule.opponent], false);
+  braves.pitcher = [...braves.roster].sort((a,b)=>b.pitching-a.pitching)[0];
+  opp.pitcher = [...opp.roster].sort((a,b)=>b.pitching-a.pitching)[0];
+  const away = selectedSchedule.home ? opp : braves;
+  const home = selectedSchedule.home ? braves : opp;
+  game = {
+    away, home, braves, opponent:opp,
+    inning:1, half:'top', maxInnings:settings.innings,
+    outs:0, balls:0, strikes:0, bases:[null,null,null],
+    score:{away:0, home:0},
+    batIndex:{[away.name]:0,[home.name]:0},
+    currentBatter:null,
+    mode:'transition',
+    aim:0, baseCommand:'auto', stealQueued:false,
+    selectedPitch:'Fastball', target:{x:0,y:0}, meter:{active:false,pos:.5,dir:1},
+    pitch:null, ball:null, fielders:[], selectedFielder:null, joystick:{x:0,y:0,active:false},
+    activeRunners:[], throw:null, fieldPlay:null, stats:{}, aiStealChecked:false, aiStealQueued:null,
+    log:'Ready', timer:null, lastPlayAt:performance.now(), powerCharge:0, powerCharging:false
+  };
+  showScreen('game');
+  resizeCanvas();
+  beginHalf();
+  startLoop();
+}
+
+function battingTeam(){return game.half === 'top' ? game.away : game.home;}
+function fieldingTeam(){return game.half === 'top' ? game.home : game.away;}
+function offenseIsUser(){return battingTeam().isUser;}
+function defenseIsUser(){return fieldingTeam().isUser;}
+function currentPitcherTeam(){return fieldingTeam();}
+function baseName(n){return n === 1 ? '1B' : n === 2 ? '2B' : n === 3 ? '3B' : 'Home';}
+
+function beginHalf(){
+  game.outs = 0; game.balls = 0; game.strikes = 0; game.bases = [null,null,null];
+  clearFieldPlay();
+  const t = battingTeam();
+  setLog(`${game.half === 'top' ? 'Top' : 'Bottom'} ${game.inning}: ${t.short} batting.`);
+  setTimeoutSafe(setupAtBat, 750);
+}
+function setupAtBat(){
+  if(!game) return;
+  game.balls = 0; game.strikes = 0; game.pitch = null; game.ball = null; game.throw = null; game.activeRunners = [];
+  game.baseCommand = 'auto'; game.stealQueued = false; game.aiStealChecked = false; game.aiStealQueued = null;
+  const team = battingTeam();
+  const idx = game.batIndex[team.name] % team.roster.length;
+  game.currentBatter = team.roster[idx];
+  syncUI();
+  if(offenseIsUser()){
+    game.mode = 'userBatting';
+    setLog(`${displayName(game.currentBatter,team)} up. Catcher view: track the ball into the white box.`);
+    setTimeoutSafe(startAIPitch, 850);
+  }else{
+    game.mode = 'userPitching';
+    setLog(`Pitch to ${displayName(game.currentBatter,team)} from catcher view. Pick pitch, tap target, release meter.`);
+  }
+  syncControls();
+}
+function advanceBatter(){
+  const team = battingTeam();
+  game.batIndex[team.name] = (game.batIndex[team.name] + 1) % team.roster.length;
+}
+function setTimeoutSafe(fn, ms){
+  if(game && game.timer) clearTimeout(game.timer);
+  if(game) game.timer = setTimeout(() => { if(game) fn(); }, ms);
+}
+function clearFieldPlay(){
+  game.pitch = null; game.ball = null; game.throw = null; game.fielders = []; game.selectedFielder = null; game.fieldPlay = null; game.activeRunners = [];
+}
+
+function startAIPitch(){
+  if(!game || game.mode !== 'userBatting' || game.pitch) return;
+  const team = currentPitcherTeam();
+  const pitcher = team.pitcher;
+  const pitchType = chooseWeightedPitch(pitcher);
+  const pitch = makePitch(pitchType, pitcher, team, false);
+  game.pitch = pitch;
+  addPitchCount(team,pitcher);
+  setLog(`${team.short} pitcher delivers ${pitchType}. Track the ball, then swing in the white timing window.`);
+  beep('pitch');
+  syncUI();
+}
+function chooseWeightedPitch(pitcher){
+  const r = Math.random();
+  const good = pitcher.pitching > 72;
+  if(r < (good ? .42 : .52)) return 'Fastball';
+  if(r < .67) return 'Changeup';
+  if(r < .84) return 'Curveball';
+  return 'Slider';
+}
+// Pitch quality combines the selected pitch, release timing, pitcher rating, and stamina.
+function makePitch(type, pitcher, team, userControlled, releaseQuality=0.75){
+  const stamina = pitcherStamina(team) / 100;
+  let baseQuality = userControlled ? releaseQuality : clamp(.55 + pitcher.pitching/210 + stamina*.18 + rand(-.18,.12) + difficultyMod(), .18, .98);
+  if(!userControlled && team.isUser) baseQuality += .05;
+  const target = userControlled ? {...game.target} : chooseAILocation(type);
+  const miss = (1 - baseQuality) * (settings.difficulty === 'Hard' && !team.isUser ? .45 : .62);
+  const actual = {x:target.x + rand(-miss,miss), y:target.y + rand(-miss,miss)};
+  // Slower pitch flight for mobile readability. This is intentionally arcade-paced,
+  // so kids can recognize the pitch, see the ball path, and make a real swing decision.
+  const speedMap = {Fastball:1720, Changeup:2250, Curveball:2360, Slider:2080};
+  const duration = speedMap[type] + rand(-110,110) - pitcher.pitching * 1.7;
+  return {
+    type, target, actual, quality:baseQuality,
+    start:performance.now(), duration:clamp(duration,1450,2580), progress:0, spin:rand(0,Math.PI*2), trail:[],
+    swung:false, aiChecked:false, userControlled,
+    inZone:Math.abs(actual.x) <= .72 && Math.abs(actual.y) <= .78
+  };
+}
+function chooseAILocation(type){
+  const attack = Math.random();
+  let x = rand(-.75,.75), y = rand(-.8,.8);
+  if(attack < .25){ x = choose([-1.05,.98]) + rand(-.16,.16); y = rand(-.75,.75); }
+  if(type === 'Changeup') y += .18;
+  if(type === 'Curveball') y += .26;
+  if(type === 'Fastball') y -= .1;
+  return {x:clamp(x,-1.25,1.25), y:clamp(y,-1.15,1.15)};
+}
+
+function releaseUserPitch(){
+  if(!game || game.mode !== 'userPitching') return;
+  if(!game.meter.active){
+    game.meter.active = true;
+    $('#meterBtn').textContent = 'Release';
+    setLog('Release on the white center stripe for best accuracy.');
+    return;
+  }
+  const quality = clamp(1 - Math.abs(game.meter.pos - .5) * 2, 0, 1);
+  game.meter.active = false;
+  $('#meterBtn').textContent = 'Start Meter';
+  const team = currentPitcherTeam();
+  const pitcher = team.pitcher;
+  game.pitch = makePitch(game.selectedPitch, pitcher, team, true, clamp(.18 + quality*.78 + pitcher.pitching/600, .15, .98));
+  addPitchCount(team,pitcher);
+  game.mode = 'userPitchDelivered';
+  setLog(`${game.selectedPitch} released. ${quality > .75 ? 'Paint!' : quality < .35 ? 'Missed release.' : 'Playable pitch.'}`);
+  beep('pitch');
+  syncUI(); syncControls();
+}
+
+function handleSwing(kind){
+  if(!game || game.mode !== 'userBatting' || !game.pitch || game.pitch.swung) return;
+  const p = game.pitch;
+  p.swung = true;
+  const charge = kind === 'power' ? game.powerCharge : 0;
+  game.powerCharging = false;
+  $('#chargeBar').classList.remove('active');
+  resolveSwing(kind, game.currentBatter, battingTeam(), p, true, charge);
+}
+function aiMaybeSwing(){
+  if(!game || game.mode !== 'userPitchDelivered' || !game.pitch || game.pitch.aiChecked) return;
+  const p = game.pitch;
+  if(p.progress < .79) return;
+  p.aiChecked = true;
+  const batter = game.currentBatter;
+  const countPressure = game.strikes === 2 ? .18 : game.balls >= 2 ? -.05 : 0;
+  const chase = p.inZone ? .56 : .16;
+  const badPitchBoost = (1 - p.quality) * .25;
+  const chance = clamp(chase + batter.batting/260 + countPressure + badPitchBoost + difficultyMod(), .08, .92);
+  if(Math.random() < chance){
+    p.swung = true;
+    const kind = Math.random() < .24 ? 'power' : 'contact';
+    resolveSwing(kind, batter, battingTeam(), p, false, kind === 'power' ? rand(.2,.7) : 0);
+  }
+}
+// Core batting model: timing + ratings + pitch quality determine miss/foul/contact quality.
+function resolveSwing(kind, batter, team, pitch, user, charge=0){
+  const pitcher = currentPitcherTeam().pitcher;
+  const progress = pitch.progress;
+  // Wider timing window for mobile: contact should be readable, not twitch-only.
+  const ideal = kind === 'bunt' ? .83 : .86;
+  const timingWindow = kind === 'contact' ? .42 : kind === 'power' ? .36 : .40;
+  const timing = clamp(1 - Math.abs(progress - ideal) / timingWindow, 0, 1);
+  const ratingEdge = (batter.batting - pitcher.pitching) / 100;
+  let contactChance = .42 + timing*.52 + ratingEdge*.22 - pitch.quality*.06;
+  if(kind === 'contact') contactChance += .13;
+  if(kind === 'power') contactChance -= .08 - charge*.08;
+  if(kind === 'bunt') contactChance += .2;
+  if(!user) contactChance += difficultyMod();
+  if(user && settings.difficulty === 'Easy') contactChance += .09;
+  if(user && kind === 'contact') contactChance += .04;
+  const contactRoll = Math.random();
+  const lateEarly = progress < ideal ? 'early' : 'late';
+
+  if(timing < .11 || contactRoll > clamp(contactChance,.08,.92)){
+    if(timing > .16 && Math.random() < .38){
+      setLog(`Fouled ${lateEarly}.`);
+      beep('hit');
+      addStrike(true);
+    }else{
+      setLog(`${user ? 'Swing and miss' : 'AI swings through it'} on the ${pitch.type}.`);
+      beep('out');
+      addStrike(false);
+    }
+    return;
+  }
+
+  const foulChance = Math.max(0, .2 - timing*.14 + (Math.abs(game.aim)*.03));
+  if(kind !== 'bunt' && Math.random() < foulChance){
+    setLog(`Foul ball ${lateEarly}.`);
+    beep('hit');
+    addStrike(true);
+    return;
+  }
+
+  let quality = clamp(timing*.48 + batter.batting/180 + rand(-.12,.17) - pitch.quality*.07, .05, 1);
+  if(kind === 'power') quality = clamp(quality + .11 + charge*.16, 0, 1);
+  if(kind === 'contact') quality = clamp(quality + .03, 0, 1);
+  if(kind === 'bunt') quality = clamp(.28 + timing*.25 + batter.speed/500, .18, .62);
+  const contact = makeContact(kind, quality, timing, user ? game.aim : rand(-.7,.7));
+  beep('hit');
+  startBallInPlay(contact, user);
+}
+function makeContact(kind, quality, timing, aim){
+  let type = 'grounder';
+  if(kind === 'bunt') type = 'bunt';
+  else if(quality > .82) type = Math.random() < .33 ? 'homeRun' : 'deepFly';
+  else if(quality > .66) type = Math.random() < .55 ? 'lineDrive' : 'flyBall';
+  else if(quality > .42) type = Math.random() < .55 ? 'grounder' : 'popFly';
+  else type = Math.random() < .7 ? 'weakGrounder' : 'popFly';
+  if(kind === 'power' && quality > .87 && Math.random() < .38) type = 'homeRun';
+  const dir = clamp(aim + rand(-.35,.35) + (timing < .75 ? rand(-.2,.2) : 0), -1.15, 1.15);
+  return {type, quality, dir, timing, kind};
+}
+
+function addBall(){
+  game.balls++;
+  if(game.balls >= 4){ plateResult({kind:'walk'}); }
+  else nextPitchAfter(`${game.balls}-${game.strikes}`);
+}
+function addStrike(isFoul){
+  if(isFoul && game.strikes >= 2){ nextPitchAfter('Still alive.'); return; }
+  game.strikes++;
+  if(game.strikes >= 3){ plateResult({kind:'strikeout'}); }
+  else nextPitchAfter(`${game.balls}-${game.strikes}`);
+}
+function pitchTaken(){
+  if(!game || !game.pitch) return;
+  const p = game.pitch;
+  const text = p.inZone ? `Called strike on ${p.type}.` : `${p.type} misses. Ball.`;
+  setLog(text);
+  if(p.inZone) addStrike(false); else addBall();
+}
+function nextPitchAfter(text){
+  game.pitch = null;
+  syncUI();
+  if(game.stealQueued && offenseIsUser() && hasRunner()){
+    attemptSteal('user');
+    return;
+  }
+  if(game.aiStealQueued && !offenseIsUser() && hasRunner()){
+    attemptSteal('ai');
+    return;
+  }
+  if(game.outs >= 3) return;
+  if(offenseIsUser()){
+    game.mode = 'userBatting';
+    setTimeoutSafe(startAIPitch, 700);
+  }else{
+    game.mode = 'userPitching';
+    setLog(text + ' Pick the next pitch.');
+  }
+  syncControls();
+}
+function hasRunner(){return game.bases.some(Boolean);}
+function attemptSteal(controller='user'){
+  const targetBase = game.bases[1] ? 3 : game.bases[0] ? 2 : null;
+  if(!targetBase){ game.stealQueued = false; nextPitchAfter('No steal available.'); return; }
+  const runner = game.bases[targetBase-2];
+  const catcher = fieldingTeam().roster[1] || fieldingTeam().roster[0];
+  const chance = clamp(.52 + runner.player.speed/250 - catcher.fielding/360 + (settings.difficulty === 'Easy' ? .08 : settings.difficulty === 'Hard' ? -.08 : 0), .25, .85);
+  game.stealQueued = false; game.aiStealQueued = null;
+  if(Math.random() < chance){
+    game.bases[targetBase-1] = runner; game.bases[targetBase-2] = null;
+    setLog(`${displayName(runner.player, runner.team)} steals ${baseName(targetBase)}!`);
+    beep('score');
+  }else{
+    game.bases[targetBase-2] = null;
+    game.outs++;
+    setLog(`Caught stealing at ${baseName(targetBase)}.`);
+    beep('out');
+  }
+  if(game.outs >= 3) endHalf(); else setTimeoutSafe(setupAtBat, 850);
+  syncUI(); syncControls();
+}
+
+function maybeAIStartSteal(){
+  if(!game || game.mode !== 'userPitchDelivered' || game.aiStealChecked || !hasRunner() || game.pitch.progress < .42) return;
+  game.aiStealChecked = true;
+  const runnerOnFirst = game.bases[0];
+  const runnerOnSecond = game.bases[1];
+  const runner = runnerOnSecond || runnerOnFirst;
+  if(!runner) return;
+  const leadRunnerSpeed = runner.player.speed || 65;
+  const countBoost = game.balls >= 2 ? .06 : game.strikes >= 2 ? -.03 : 0;
+  const chance = clamp(.10 + leadRunnerSpeed/620 + countBoost + (settings.difficulty === 'Hard' ? .08 : settings.difficulty === 'Easy' ? -.04 : 0), .06, .33);
+  if(Math.random() < chance){
+    game.aiStealQueued = runnerOnSecond ? 3 : 2;
+    setLog(`${displayName(runner.player, battingTeam())} breaks for ${baseName(game.aiStealQueued)}! Finish the pitch, then the catcher throws.`);
+  }
+}
+
+function pickoff(base){
+  if(!game || game.mode !== 'userPitching') return;
+  const runner = game.bases[base-1];
+  if(!runner){ setLog(`No runner on ${baseName(base)} to pick off.`); beep('tap'); return; }
+  const pitcher = currentPitcherTeam().pitcher;
+  const runnerRating = runner.player.speed;
+  const chance = clamp(.08 + pitcher.pitching/420 - runnerRating/520 + (settings.difficulty === 'Easy' ? .04 : settings.difficulty === 'Hard' ? -.035 : 0), .05, .28);
+  if(Math.random() < chance){
+    game.bases[base-1] = null;
+    game.outs++;
+    setLog(`Picked off at ${baseName(base)}!`);
+    beep('out');
+    syncUI();
+    if(game.outs >= 3) setTimeoutSafe(endHalf, 750); else setTimeoutSafe(setupAtBat, 850);
+  }else{
+    setLog(`${displayName(runner.player, runner.team)} dives back safely at ${baseName(base)}.`);
+    beep('throw');
+  }
+}
+
+function plateResult(res){
+  const batter = game.currentBatter;
+  const offense = battingTeam();
+  const defense = fieldingTeam();
+  const bStat = ensureStat(offense,batter);
+  if(res.kind === 'walk'){
+    bStat.BB++;
+    walkAdvance(batter, offense);
+    setLog(`${displayName(batter,offense)} walks.`);
+  }else if(res.kind === 'strikeout'){
+    bStat.AB++; bStat.K++;
+    game.outs++;
+    setLog(`${displayName(batter,offense)} strikes out.`);
+    beep('out');
+  }else if(res.kind === 'out'){
+    bStat.AB++;
+    game.outs++;
+    setLog(res.text || `${displayName(batter,offense)} is out.`);
+    beep('out');
+  }else if(res.kind === 'error'){
+    bStat.AB++;
+    const errFielder = res.fielder || defense.roster[Math.floor(Math.random()*9)];
+    ensureStat(defense, errFielder).E++;
+    advanceOnHit(1, batter, offense, false, true);
+    setLog(`Error lets ${displayName(batter,offense)} reach.`);
+  }else if(res.kind === 'hit'){
+    bStat.AB++; bStat.H++;
+    if(res.bases === 4){ bStat.HR++; }
+    const runs = advanceOnHit(res.bases, batter, offense, res.bases === 4, false);
+    bStat.RBI += runs;
+    setLog(res.text || `${displayName(batter,offense)} ${res.bases === 4 ? 'homers' : res.bases === 3 ? 'triples' : res.bases === 2 ? 'doubles' : 'singles'}!`);
+    if(runs) beep('score');
+  }
+  if(res.kind !== 'defer') advanceBatter();
+  syncUI();
+  if(game.outs >= 3){ setTimeoutSafe(endHalf, 900); }
+  else setTimeoutSafe(setupAtBat, 900);
+}
+function walkAdvance(batter, offense){
+  let runs = 0;
+  if(game.bases[0] && game.bases[1] && game.bases[2]) runs += scoreRunner(game.bases[2], offense);
+  if(game.bases[0] && game.bases[1]) game.bases[2] = game.bases[1];
+  if(game.bases[0]) game.bases[1] = game.bases[0];
+  game.bases[0] = {player:batter, team:offense};
+  ensureStat(offense,batter).RBI += runs;
+}
+function advanceOnHit(bases, batter, offense, hr=false, error=false){
+  let runs = 0;
+  const old = game.bases.map(r => r);
+  game.bases = [null,null,null];
+  for(let i=2;i>=0;i--){
+    const runner = old[i];
+    if(!runner) continue;
+    const dest = i + 1 + bases;
+    if(dest >= 4) runs += scoreRunner(runner, offense);
+    else game.bases[dest-1] = runner;
+  }
+  if(hr){
+    runs += scoreRunner({player:batter, team:offense}, offense);
+  }else{
+    game.bases[bases-1] = {player:batter, team:offense};
+  }
+  return runs;
+}
+function scoreRunner(runner, offense){
+  if(!runner) return 0;
+  if(offense === game.away) game.score.away++; else game.score.home++;
+  ensureStat(runner.team, runner.player).R++;
+  ensureStat(currentPitcherTeam(), currentPitcherTeam().pitcher).RA++;
+  return 1;
+}
+function endHalf(){
+  if(!game) return;
+  clearFieldPlay();
+  game.pitch = null;
+  if(game.half === 'top'){
+    if(game.inning >= game.maxInnings && game.score.home > game.score.away){ endGame(); return; }
+    game.half = 'bottom';
+  }else{
+    if(game.inning >= game.maxInnings && game.score.home !== game.score.away){ endGame(); return; }
+    game.inning++;
+    game.half = 'top';
+  }
+  beginHalf();
+}
+function endGame(){
+  const winner = game.score.away > game.score.home ? game.away : game.score.home > game.score.away ? game.home : null;
+  const stats = Object.values(game.stats);
+  const potg = stats.slice().sort((a,b)=>((b.H*3+b.R*2+b.RBI*2+b.HR*5+b.K*.2)-(a.H*3+a.R*2+a.RBI*2+a.HR*5+a.K*.2)))[0];
+  const content = $('#postgameContent');
+  const bravesScore = game.away.isUser ? game.score.away : game.score.home;
+  const oppScore = game.away.isUser ? game.score.home : game.score.away;
+  const bravesStats = stats.filter(s=>s.team==='Braves').sort((a,b)=>b.H-a.H || b.RBI-a.RBI || b.AB-a.AB).slice(0,8);
+  content.innerHTML = `<div class="card"><h2 style="margin:0 0 4px">${game.away.short} ${game.score.away} • ${game.home.short} ${game.score.home}</h2><p class="muted">${winner ? `${winner.short} win.` : 'Tie game.'} Braves ${bravesScore}, ${game.opponent.short} ${oppScore}</p><div class="pill">Player of the Game: ${potg ? `#${potg.number} ${potg.name}` : 'None'}</div></div>
+  <div class="card"><h2 style="margin:0 0 8px;font-size:18px">Braves Box Score</h2><table class="box-table"><thead><tr><th>Player</th><th>AB</th><th>H</th><th>R</th><th>RBI</th><th>HR</th><th>K</th></tr></thead><tbody>${bravesStats.map(s=>`<tr><td>#${s.number} ${s.name}</td><td>${s.AB}</td><td>${s.H}</td><td>${s.R}</td><td>${s.RBI}</td><td>${s.HR}</td><td>${s.K}</td></tr>`).join('')}</tbody></table></div>
+  <div class="card"><h2 style="margin:0 0 8px;font-size:18px">Pitching / Defense</h2>${stats.filter(s=>s.PC||s.RA||s.E).sort((a,b)=>b.PC-a.PC).slice(0,10).map(s=>`<div class="statline"><span>#${s.number} ${s.name} (${s.team})</span><strong>${s.PC} PC • ${s.RA} RA • ${s.E} E</strong></div>`).join('') || '<p class="muted">No pitching stats recorded.</p>'}</div>`;
+  stopLoop();
+  showScreen('postgame');
+}
+
+function startBallInPlay(contact, userBatting){
+  game.pitch = null;
+  game.mode = userBatting ? 'aiFielding' : 'userFielding';
+  game.lastPlayAt = performance.now();
+  game.ball = createHitBall(contact);
+  if(contact.type === 'homeRun'){
+    setLog(`${userBatting ? 'Crushed' : 'AI drives it'} deep! Track it!`);
+  }else{
+    setLog(`${contact.type.replace(/([A-Z])/g,' $1').toLowerCase()} in play.`);
+  }
+  if(userBatting){
+    setupAIFielding(contact);
+  }else{
+    setupUserFielding(contact);
+  }
+  syncControls();
+}
+function createHitBall(contact){
+  const pos = fieldPos();
+  const start = pos.home;
+  let depth;
+  switch(contact.type){
+    case 'homeRun': depth = CH*.58; break;
+    case 'deepFly': depth = CH*.46; break;
+    case 'flyBall': depth = CH*.35; break;
+    case 'lineDrive': depth = CH*.31; break;
+    case 'bunt': depth = CH*.09; break;
+    case 'weakGrounder': depth = CH*.16; break;
+    default: depth = CH*.24;
+  }
+  const maxSide = CW*.46;
+  const x = clamp(start.x + contact.dir * maxSide * (depth/(CH*.5)), 18, CW-18);
+  const y = clamp(start.y - depth, CH*.14, CH*.88);
+  // Balls stay live a touch longer so fielding has real interaction time.
+  const dur = contact.type === 'homeRun' ? 1700 : contact.type.includes('Fly') || contact.type==='deepFly' ? 1350 : contact.type === 'bunt' ? 950 : 1080;
+  return {x:start.x,y:start.y,startX:start.x,startY:start.y,landX:x,landY:y,progress:0,start:performance.now(),duration:dur,type:contact.type,quality:contact.quality,dir:contact.dir,held:false,dead:false};
+}
+function setupAIFielding(contact){
+  const fTeam = fieldingTeam();
+  const p = fieldPos();
+  const coords = [p.p,p.c,p.fb,p.sb,p.tb,p.ss,p.lf,p.cf,p.rf];
+  game.fielders = ROLES.map((role,i)=>({role, player:fTeam.roster[i % fTeam.roster.length], x:coords[i].x, y:coords[i].y, homeX:coords[i].x, homeY:coords[i].y, hasBall:false, selected:false, errorDelay:0}));
+  const target = {x:game.ball.landX, y:game.ball.landY};
+  game.selectedFielder = game.fielders.slice().sort((a,b)=>dist(a,target)-dist(b,target))[0];
+  game.selectedFielder.selected = true;
+  game.activeRunners = createActiveRunners(contact);
+  const outcome = determineAIFieldOutcome(contact);
+  game.fieldPlay = {contact, resolved:false, start:performance.now(), outcome, ballSecured:false, securedAt:null, throwStarted:false};
+}
+
+function determineAIFieldOutcome(contact){
+  if(contact.type === 'homeRun') return {kind:'hit', bases:4, text:'No doubt. Home run!'};
+  const defense = fieldingTeam();
+  const avgField = defense.roster.slice(0,9).reduce((a,p)=>a+p.fielding,0)/9;
+  const userBase = game.baseCommand;
+  let outChance = .49 + avgField/300 - contact.quality*.45 + (settings.difficulty === 'Hard' ? .1 : settings.difficulty === 'Easy' ? -.08 : 0);
+  if(contact.type === 'popFly') outChance += .28;
+  if(contact.type === 'deepFly') outChance += .04;
+  if(contact.type === 'lineDrive') outChance -= .08;
+  if(contact.type === 'bunt') outChance -= .05;
+  if(userBase === 'advance') outChance += .11;
+  if(userBase === 'hold') outChance -= .06;
+  const errorChance = clamp(.06 + (70-avgField)/500 + (contact.type === 'grounder' ? .04 : 0), .02, .16);
+  if(Math.random() < errorChance) return {kind:'error'};
+  if(Math.random() < clamp(outChance,.12,.88)) return {kind:'out', text:`${fieldingTeam().short} makes the play.`};
+  let bases = 1;
+  if(contact.type === 'deepFly' || contact.quality > .78) bases = Math.random() < (game.baseCommand === 'advance' ? .5 : .32) ? 2 : 1;
+  if(contact.quality > .9 && Math.random() < .22) bases = 3;
+  if(userBase === 'retreat') bases = 1;
+  return {kind:'hit', bases, text:`${bases===3?'Triple':bases===2?'Double':'Base hit'} for the Braves.`};
+}
+function updateAIFielding(now, dt=16){
+  const b = game.ball;
+  if(!b || !game.fieldPlay) return;
+  if(!b.held){
+    b.progress = clamp((now - b.start) / b.duration, 0, 1);
+    const ease = b.progress < .5 ? 2*b.progress*b.progress : 1 - Math.pow(-2*b.progress+2,2)/2;
+    b.x = b.startX + (b.landX - b.startX) * ease;
+    b.y = b.startY + (b.landY - b.startY) * ease - Math.sin(Math.PI*b.progress) * (b.type.includes('Fly') || b.type==='homeRun' ? CH*.08 : CH*.02);
+  }
+  updateRunners(dt);
+  // Animate the defense so the play reads like baseball: nearest fielder breaks to the landing spot,
+  // secures the ball, then makes a visible throw before the result is applied.
+  const f = game.selectedFielder;
+  if(f && !game.fieldPlay.ballSecured){
+    const targetX = b.progress < .75 ? b.landX : b.x;
+    const targetY = b.progress < .75 ? b.landY : b.y;
+    const dx = targetX - f.x, dy = targetY - f.y;
+    const len = Math.hypot(dx,dy) || 1;
+    const speed = 155 + f.player.speed*1.45 + f.player.fielding*.85;
+    f.x += dx/len * speed * dt/1000;
+    f.y += dy/len * speed * dt/1000;
+    if(dist(f,{x:targetX,y:targetY}) < 22 && b.progress > .55){
+      f.hasBall = true; b.held = true; b.x = f.x; b.y = f.y;
+      game.fieldPlay.ballSecured = true; game.fieldPlay.securedAt = now;
+      setLog(`${f.role} gets to the ball. Defense is making a play.`);
+      beep('tap');
+    }
+  }
+  if(game.fieldPlay.ballSecured && f){ b.x = f.x; b.y = f.y; }
+  if(game.fieldPlay.ballSecured && !game.fieldPlay.throwStarted && now - game.fieldPlay.securedAt > 450){
+    const outcome = game.fieldPlay.outcome;
+    let targetBase = 1;
+    if(outcome.kind === 'out') targetBase = 1;
+    else if(outcome.kind === 'error') targetBase = 1;
+    else if(outcome.kind === 'hit' && outcome.bases > 1) targetBase = outcome.bases;
+    const target = posForBase(targetBase);
+    game.throw = {fromX:f.x,fromY:f.y,x:f.x,y:f.y,toX:target.x,toY:target.y,base:targetBase,start:now,duration:520,accuracy:.85,visualOnly:true};
+    f.hasBall = false;
+    game.fieldPlay.throwStarted = true;
+    setLog(`${f.role} throws to ${baseName(targetBase)}.`);
+    beep('throw');
+  }
+  updateThrow(now, dt);
+  if(game.fieldPlay && !game.fieldPlay.resolved){
+    const readyAfterThrow = game.fieldPlay.throwStarted && !game.throw && now - game.fieldPlay.securedAt > 1050;
+    const timeout = now - game.fieldPlay.start > AI_FIELDING_SETTLE_MS;
+    if(readyAfterThrow || timeout){
+      game.fieldPlay.resolved = true;
+      plateResult(game.fieldPlay.outcome);
+    }
+  }
+}
+
+
+const ROLES = ['P','C','1B','2B','3B','SS','LF','CF','RF'];
+function fieldPos(){
+  return {
+    home:{x:CW*.5,y:CH*.78}, first:{x:CW*.75,y:CH*.62}, second:{x:CW*.5,y:CH*.47}, third:{x:CW*.25,y:CH*.62},
+    mound:{x:CW*.5,y:CH*.60}, catcher:{x:CW*.5,y:CH*.83},
+    p:{x:CW*.5,y:CH*.59}, c:{x:CW*.5,y:CH*.835}, fb:{x:CW*.75,y:CH*.59}, sb:{x:CW*.58,y:CH*.51}, tb:{x:CW*.25,y:CH*.59}, ss:{x:CW*.39,y:CH*.52}, lf:{x:CW*.22,y:CH*.32}, cf:{x:CW*.50,y:CH*.25}, rf:{x:CW*.78,y:CH*.32}
+  };
+}
+function posForBase(n){ const p=fieldPos(); return n===1?p.first:n===2?p.second:n===3?p.third:p.home; }
+// Defensive mode: auto-selects the nearest fielder but still lets the player move and throw.
+function setupUserFielding(contact){
+  const fTeam = fieldingTeam();
+  const p = fieldPos();
+  const coords = [p.p,p.c,p.fb,p.sb,p.tb,p.ss,p.lf,p.cf,p.rf];
+  game.fielders = ROLES.map((role,i)=>({role, player:fTeam.roster[i % fTeam.roster.length], x:coords[i].x, y:coords[i].y, hasBall:false, selected:false, errorDelay:0}));
+  const b = game.ball;
+  game.selectedFielder = game.fielders.slice().sort((a,bf)=>dist(a,b)-dist(bf,b))[0];
+  game.selectedFielder.selected = true;
+  game.activeRunners = createActiveRunners(contact);
+  game.fieldPlay = {contact, start:performance.now(), ballSecured:false, batterOut:false, runnerOut:false, resolved:false, hitBases:1, diveBoost:0};
+  setLog(`Field it! ${game.selectedFielder.role} selected. Throw to the right base.`);
+}
+function createActiveRunners(contact){
+  const offense = battingTeam();
+  const runners = [];
+  const forceExtra = contact.quality > .76 || contact.type === 'deepFly';
+  for(let i=2;i>=0;i--){
+    const r = game.bases[i];
+    if(!r) continue;
+    let dest = i + 2;
+    if(forceExtra && i >= 1) dest++;
+    if(contact.type === 'bunt') dest = i + 2;
+    runners.push({player:r.player, team:r.team, from:i+1, dest:Math.min(dest,4), progress:0, safe:false, out:false, isBatter:false, x:posForBase(i+1).x, y:posForBase(i+1).y, speed:r.player.speed, arrivedAt:null});
+  }
+  const batter = game.currentBatter;
+  let batterDest = 1;
+  if(contact.type === 'deepFly' && contact.quality > .84) batterDest = 2;
+  runners.push({player:batter, team:offense, from:0, dest:batterDest, progress:0, safe:false, out:false, isBatter:true, x:posForBase(0).x, y:posForBase(0).y, speed:batter.speed, arrivedAt:null});
+  return runners;
+}
+function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
+function updateUserFielding(now, dt){
+  const ball = game.ball;
+  if(!ball || !game.fieldPlay) return;
+  if(!ball.held){
+    ball.progress = clamp((now - ball.start) / ball.duration, 0, 1);
+    const ease = ball.progress < .5 ? 2*ball.progress*ball.progress : 1 - Math.pow(-2*ball.progress+2,2)/2;
+    ball.x = ball.startX + (ball.landX - ball.startX) * ease;
+    ball.y = ball.startY + (ball.landY - ball.startY) * ease - Math.sin(Math.PI*ball.progress) * ((ball.type.includes('Fly')||ball.type==='deepFly') ? CH*.08 : CH*.015);
+  }
+  updateRunners(dt);
+  updateFielderMovement(dt);
+  updateThrow(now, dt);
+  maybeFieldBall(now);
+  if(game.fieldPlay && !game.fieldPlay.resolved && !game.throw && game.fieldPlay.ballSecured && now - game.fieldPlay.securedAt > AUTO_THROW_AFTER_SECURE_MS){
+    autoThrowDecision();
+  }
+  if(game.fieldPlay && !game.fieldPlay.resolved && now - game.fieldPlay.start > USER_FIELDING_SETTLE_MS){
+    resolveFieldingPlay('settle');
+  }
+}
+function updateRunners(dt){
+  const now = performance.now();
+  for(const r of game.activeRunners){
+    if(r.out || r.safe) continue;
+    // 12U arcade pacing: runners are fast, but fielders need a playable beat to make a throw.
+    const duration = clamp(2925 - r.speed*7.1 + (r.isBatter ? 120 : 0), 2100, 2750);
+    r.progress = clamp(r.progress + dt / duration, 0, 1);
+    const a = posForBase(r.from), b = posForBase(r.dest);
+    r.x = a.x + (b.x - a.x) * r.progress;
+    r.y = a.y + (b.y - a.y) * r.progress;
+    if(r.progress >= 1){
+      if(!r.arrivedAt) r.arrivedAt = now;
+      // Keep the runner in a close-play state briefly so a quick throw can still matter.
+      if(now - r.arrivedAt > CLOSE_PLAY_WINDOW) r.safe = true;
+    }
+  }
+}
+function updateFielderMovement(dt){
+  const f = game.selectedFielder;
+  if(!f || f.hasBall) return;
+  const ball = game.ball;
+  const autoX = ball.x - f.x, autoY = ball.y - f.y;
+  const len = Math.hypot(autoX,autoY) || 1;
+  const assist = .9;
+  const joy = game.joystick;
+  let vx = autoX / len * assist + joy.x * .8;
+  let vy = autoY / len * assist + joy.y * .8;
+  const vlen = Math.hypot(vx,vy) || 1;
+  const playerSpeed = 135 + f.player.speed*1.35 + f.player.fielding*.55 + (game.fieldPlay.diveBoost || 0);
+  f.x += (vx/vlen) * playerSpeed * dt/1000;
+  f.y += (vy/vlen) * playerSpeed * dt/1000;
+  f.x = clamp(f.x, 12, CW-12); f.y = clamp(f.y, CH*.17, CH*.88);
+  if(game.fieldPlay.diveBoost) game.fieldPlay.diveBoost = Math.max(0, game.fieldPlay.diveBoost - dt*.25);
+}
+function maybeFieldBall(now){
+  const f = game.selectedFielder, b = game.ball;
+  if(!f || !b || b.held || game.throw) return;
+  if(f.errorDelay && now < f.errorDelay) return;
+  const radius = (b.type.includes('Fly') || b.type === 'deepFly' || b.type === 'popFly') ? 24 : 21;
+  if(dist(f,b) < radius && (b.progress > .52 || b.type !== 'homeRun')){
+    const fly = ['deepFly','flyBall','popFly','lineDrive'].includes(b.type);
+    const catchChance = fly && b.progress < .97 ? clamp(.54 + f.player.fielding/180 - b.quality*.18 + (game.fieldPlay.diveBoost ? .12 : 0), .25, .95) : 0;
+    const errorChance = clamp(.04 + (72 - f.player.fielding)/420 + (b.type.includes('grounder') ? .04 : 0), .015, .16);
+    if(fly && Math.random() < catchChance){
+      f.hasBall = true; b.held = true; game.fieldPlay.ballSecured = true; game.fieldPlay.securedAt = now; game.fieldPlay.batterOut = true;
+      setLog(`${f.role} makes the catch!`);
+      beep('out');
+      resolveFieldingPlay('catch');
+      return;
+    }
+    if(Math.random() < errorChance){
+      f.errorDelay = now + 650;
+      setLog(`${f.role} bobbles it. Recover and throw!`);
+      beep('out');
+      return;
+    }
+    f.hasBall = true; b.held = true; b.x = f.x; b.y = f.y; game.fieldPlay.ballSecured = true; game.fieldPlay.securedAt = now;
+    setLog(`${f.role} has it. Throw!`);
+    beep('tap');
+  }
+}
+function throwTo(base){
+  if(!game || game.mode !== 'userFielding' || !game.selectedFielder || !game.selectedFielder.hasBall || game.throw) return;
+  const f = game.selectedFielder;
+  const target = posForBase(base);
+  const accuracy = clamp(f.player.fielding/100 + rand(-.12,.08), .35, .98);
+  game.throw = {fromX:f.x,fromY:f.y,x:f.x,y:f.y,toX:target.x + rand(-16,16)*(1-accuracy),toY:target.y + rand(-16,16)*(1-accuracy),base,start:performance.now(),duration:clamp(540 - f.player.fielding*2.1, 315, 540),accuracy};
+  f.hasBall = false;
+  game.ball.held = false;
+  setLog(`Throwing to ${baseName(base)}.`);
+  beep('throw');
+}
+function updateThrow(now){
+  const th = game.throw;
+  if(!th) return;
+  const p = clamp((now - th.start)/th.duration,0,1);
+  th.x = th.fromX + (th.toX - th.fromX)*p;
+  th.y = th.fromY + (th.toY - th.fromY)*p - Math.sin(Math.PI*p)*28;
+  game.ball.x = th.x; game.ball.y = th.y;
+  if(p >= 1){ if(!th.visualOnly) evaluateThrow(th.base, th.accuracy); game.throw = null; }
+}
+function evaluateThrow(base, accuracy){
+  const now = performance.now();
+  let candidates = game.activeRunners.filter(r => {
+    if(r.out || r.dest !== base) return false;
+    const closeAfterArrival = r.arrivedAt && (now - r.arrivedAt <= CLOSE_PLAY_WINDOW);
+    return !r.safe || closeAfterArrival;
+  });
+  candidates.sort((a,b)=>b.progress-a.progress);
+  if(!candidates.length){
+    setLog(`Throw reaches ${baseName(base)}, but the runner is already safe.`);
+    resolveFieldingPlay('settle');
+    return;
+  }
+  const runner = candidates[0];
+  const closeAfterArrival = runner.arrivedAt && (now - runner.arrivedAt <= CLOSE_PLAY_WINDOW);
+  const closePlayChance = clamp(.35 + accuracy*.42 - (runner.speed-70)/260 + (fieldingTeam().isUser ? .08 : 0), .18, .82);
+  const beat = runner.progress < (.985 - (accuracy < .55 ? .035 : 0)) || (closeAfterArrival && Math.random() < closePlayChance);
+  if(beat){
+    runner.out = true;
+    runner.safe = false;
+    game.outs++;
+    if(runner.isBatter) game.fieldPlay.batterOut = true; else game.fieldPlay.runnerOut = true;
+    setLog(`Out at ${baseName(base)}!`);
+    beep('out');
+  }else{
+    runner.safe = true;
+    setLog(`Safe at ${baseName(base)}.`);
+    beep('tap');
+  }
+  resolveFieldingPlay('throw');
+}
+function autoThrowDecision(){
+  const runners = game.activeRunners.filter(r=>!r.out && !r.safe);
+  if(!runners.length){ resolveFieldingPlay('settle'); return; }
+  const batter = runners.find(r=>r.isBatter && r.dest===1);
+  const target = batter ? 1 : runners.sort((a,b)=>b.dest-a.dest)[0].dest;
+  throwTo(target);
+}
+function resolveFieldingPlay(reason){
+  if(!game || !game.fieldPlay || game.fieldPlay.resolved) return;
+  game.fieldPlay.resolved = true;
+  const offense = battingTeam();
+  const defense = fieldingTeam();
+  const batter = game.currentBatter;
+  const batterRunner = game.activeRunners.find(r=>r.isBatter);
+
+  if(reason === 'catch'){
+    plateResult({kind:'out', text:`${displayName(batter,offense)} flies out.`});
+    return;
+  }
+
+  const newBases = [null,null,null];
+  let scored = [];
+  let hitBases = batterRunner && !batterRunner.out ? batterRunner.dest : 0;
+  for(const r of game.activeRunners){
+    if(r.out) continue;
+    const dest = r.safe ? r.dest : r.dest;
+    if(dest >= 4) scored.push(r);
+    else if(dest >= 1) newBases[dest-1] = {player:r.player, team:r.team};
+  }
+  game.bases = newBases;
+  for(const r of scored) scoreRunner({player:r.player, team:r.team}, offense);
+
+  const bStat = ensureStat(offense,batter);
+  if(batterRunner && batterRunner.out){
+    // evaluateThrow already recorded the out. Do not double-count it here.
+    bStat.AB++;
+    setLog(`${displayName(batter,offense)} is thrown out at 1B.`);
+    advanceBatter();
+    syncUI();
+    if(game.outs >= 3) setTimeoutSafe(endHalf, 900); else setTimeoutSafe(setupAtBat, 950);
+  }else{
+    bStat.AB++;
+    if(game.fieldPlay.runnerOut){
+      // Fielder's choice: the batter reaches, but the defense recorded an out elsewhere.
+      setLog(`${displayName(batter,offense)} reaches on a fielder's choice.`);
+    }else{
+      bStat.H++;
+      bStat.RBI += scored.length;
+      if(hitBases >= 4) bStat.HR++;
+      setLog(`${displayName(batter,offense)} reaches ${baseName(hitBases || 1)}.`);
+    }
+    advanceBatter();
+    syncUI();
+    if(game.outs >= 3) setTimeoutSafe(endHalf, 900); else setTimeoutSafe(setupAtBat, 950);
+  }
+}
+
+function syncUI(){
+  if(!game) return;
+  $('#awayScoreBox').innerHTML = `<span>${game.away.short}</span><span class="score-num">${game.score.away}</span>`;
+  $('#homeScoreBox').innerHTML = `<span class="score-num">${game.score.home}</span><span>${game.home.short}</span>`;
+  $('#inningBox').textContent = `${game.half === 'top' ? '▲' : '▼'} ${game.inning} / ${game.maxInnings}`;
+  $('#countBox').textContent = `B ${game.balls} • S ${game.strikes}`;
+  const dots = $('#outsBox .dots');
+  dots.innerHTML = [0,1,2].map(i => `<i class="dot ${i < game.outs ? 'on' : ''}"></i>`).join('');
+  const baseText = game.bases.map((r,i)=>r?baseName(i+1):null).filter(Boolean).join(', ') || 'Bases empty';
+  $('#baseBox').textContent = baseText;
+  const bt = battingTeam(), ft = fieldingTeam(), batter = game.currentBatter || bt.roster[0], pitcher = ft.pitcher;
+  $('#batterName').textContent = batter ? `#${batter.number} ${displayName(batter,bt)}` : '-';
+  $('#batterStats').textContent = batter ? `BAT ${batter.batting} • SPD ${batter.speed} • ${batter.hand}` : '-';
+  $('#pitcherName').textContent = pitcher ? `#${pitcher.number} ${displayName(pitcher,ft)}` : '-';
+  $('#pitcherStats').textContent = pitcher ? `PIT ${pitcher.pitching} • Stamina ${Math.round(pitcherStamina(ft))}%` : '-';
+  $('#gameLogText').textContent = game.log || '';
+}
+function syncControls(){
+  $('#batControls').classList.toggle('active', !!game && (game.mode === 'userBatting' || game.mode === 'aiFielding'));
+  $('#pitchControls').classList.toggle('active', !!game && game.mode === 'userPitching');
+  $('#fieldControls').classList.toggle('active', !!game && game.mode === 'userFielding');
+}
+
+function resizeCanvas(){
+  const rect = canvas.getBoundingClientRect();
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  CW = Math.max(320, rect.width);
+  CH = Math.max(568, rect.height);
+  canvas.width = Math.floor(CW * DPR);
+  canvas.height = Math.floor(CH * DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+function startLoop(){
+  stopLoop(); lastT = performance.now();
+  raf = requestAnimationFrame(loop);
+}
+function stopLoop(){
+  if(raf) cancelAnimationFrame(raf); raf = null;
+}
+function loop(now){
+  const dt = Math.min(40, now-lastT); lastT = now;
+  if(game){ update(now,dt); draw(); }
+  raf = requestAnimationFrame(loop);
+}
+function update(now, dt){
+  if(game.meter.active){
+    game.meter.pos += game.meter.dir * dt / 650;
+    if(game.meter.pos >= 1){ game.meter.pos = 1; game.meter.dir = -1; }
+    if(game.meter.pos <= 0){ game.meter.pos = 0; game.meter.dir = 1; }
+    $('#meterNeedle').style.left = `${game.meter.pos*100}%`;
+  }
+  if(game.powerCharging){
+    game.powerCharge = clamp((now - game.powerStart)/900, 0, 1);
+    $('#chargeFill').style.width = `${game.powerCharge*100}%`;
+  }
+  if(game.pitch){
+    game.pitch.progress = clamp((now - game.pitch.start) / game.pitch.duration, 0, 1);
+    if(game.mode === 'userPitchDelivered'){ aiMaybeSwing(); maybeAIStartSteal(); }
+    if(game.pitch && game.pitch.progress >= 1 && !game.pitch.swung){ pitchTaken(); }
+  }
+  if(game.mode === 'aiFielding') updateAIFielding(now, dt);
+  if(game.mode === 'userFielding') updateUserFielding(now, dt);
+  syncUI();
+}
+
+// Canvas render pass: field, players, runners, pitch/ball animations, and mobile hints.
+function draw(){
+  ctx.clearRect(0,0,CW,CH);
+  if(inPitchView()){
+    drawCatcherView();
+    drawPitch();
+    drawPitchViewRunners();
+    drawOverlayHints();
+  }else{
+    drawField();
+    drawFielders();
+    drawRunners();
+    drawBall();
+    drawThrow();
+    drawOverlayHints();
+  }
+}
+function inPitchView(){
+  return !!game && (game.mode === 'userBatting' || game.mode === 'userPitching' || game.mode === 'userPitchDelivered');
+}
+function pitchViewPos(){
+  return {
+    pitcher:{x:CW*.5,y:CH*.26},
+    mound:{x:CW*.5,y:CH*.285},
+    plate:{x:CW*.5,y:CH*.75},
+    zone:{cx:CW*.5, cy:CH*.58, w:Math.min(132,CW*.34), h:Math.min(170,CH*.205)},
+    batterL:{x:CW*.28,y:CH*.66},
+    batterR:{x:CW*.72,y:CH*.66}
+  };
+}
+function drawCatcherView(){
+  const pv = pitchViewPos();
+  const grad = ctx.createLinearGradient(0,0,0,CH);
+  grad.addColorStop(0,'#0d315f'); grad.addColorStop(.45,'#1f8050'); grad.addColorStop(1,'#8f5d34');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,CW,CH);
+
+  // Outfield lights / depth lines for a polished catcher-point-of-view look.
+  ctx.save();
+  ctx.globalAlpha=.18; ctx.strokeStyle='#fff'; ctx.lineWidth=1;
+  for(let i=0;i<9;i++){
+    const y = CH*.18 + i*CH*.055;
+    ctx.beginPath(); ctx.moveTo(CW*.18,y); ctx.quadraticCurveTo(CW*.5,y+18,CW*.82,y); ctx.stroke();
+  }
+  ctx.restore();
+
+  // Mound and pitcher.
+  ctx.fillStyle='#b1743f'; ctx.beginPath(); ctx.ellipse(pv.mound.x,pv.mound.y+8,CW*.16,18,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#071b3a'; ctx.strokeStyle='#cfd7e3'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(pv.pitcher.x,pv.pitcher.y-15,14,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#f7f9fc'; ctx.font='900 10px system-ui'; ctx.textAlign='center'; ctx.fillText('P',pv.pitcher.x,pv.pitcher.y-11);
+
+  // Batter silhouettes near the plate.
+  const userBatting = offenseIsUser();
+  const bp = userBatting ? pv.batterL : pv.batterR;
+  ctx.fillStyle=userBatting?'#e8edf5':'#c62828'; ctx.strokeStyle='#061327'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(bp.x,bp.y-42,13,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.roundRect(bp.x-13,bp.y-30,26,48,12); ctx.fill(); ctx.stroke();
+  ctx.strokeStyle='#f7f9fc'; ctx.lineWidth=5; ctx.lineCap='round';
+  ctx.beginPath();
+  if(userBatting){ ctx.moveTo(bp.x+14,bp.y-35); ctx.lineTo(bp.x+48,bp.y-67); }
+  else{ ctx.moveTo(bp.x-14,bp.y-35); ctx.lineTo(bp.x-48,bp.y-67); }
+  ctx.stroke();
+
+  // Plate, batter box, and catcher framing.
+  ctx.strokeStyle='rgba(255,255,255,.48)'; ctx.lineWidth=2;
+  ctx.strokeRect(pv.plate.x-86,pv.plate.y-98,50,118);
+  ctx.strokeRect(pv.plate.x+36,pv.plate.y-98,50,118);
+  drawPlate(pv.plate);
+  ctx.strokeStyle='rgba(7,27,58,.72)'; ctx.lineWidth=7; ctx.lineCap='round';
+  ctx.beginPath(); ctx.arc(CW*.5,CH*.87,CW*.26,Math.PI*1.1,Math.PI*1.9); ctx.stroke();
+  ctx.fillStyle='rgba(7,27,58,.86)'; ctx.beginPath(); ctx.roundRect(CW*.5-72, CH*.78, 144, 30, 15); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='900 12px system-ui'; ctx.textAlign='center'; ctx.fillText('CATCHER VIEW', CW*.5, CH*.798);
+
+  // Compact diamond indicator for base state.
+  const mini = {home:{x:CW-48,y:CH*.20}, first:{x:CW-27,y:CH*.17}, second:{x:CW-48,y:CH*.14}, third:{x:CW-69,y:CH*.17}};
+  ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(mini.home.x,mini.home.y); ctx.lineTo(mini.first.x,mini.first.y); ctx.lineTo(mini.second.x,mini.second.y); ctx.lineTo(mini.third.x,mini.third.y); ctx.closePath(); ctx.stroke();
+  [mini.first,mini.second,mini.third].forEach((pt,i)=>{ctx.save();ctx.translate(pt.x,pt.y);ctx.rotate(Math.PI/4);ctx.fillStyle=game.bases[i]?'#fff':'rgba(255,255,255,.18)';ctx.fillRect(-5,-5,10,10);ctx.restore();});
+}
+
+function drawPitchViewRunners(){
+  // The mini diamond inside drawCatcherView already shows occupied bases. This hook
+  // keeps the pitch-view render path parallel with the field-view path for expansion.
+}
+
+function drawField(){
+  const p = fieldPos();
+  const grad = ctx.createLinearGradient(0,0,0,CH); grad.addColorStop(0,'#238958'); grad.addColorStop(1,'#145e39'); ctx.fillStyle = grad; ctx.fillRect(0,0,CW,CH);
+  ctx.save(); ctx.globalAlpha=.13; ctx.strokeStyle='#fff'; ctx.lineWidth=1; for(let i=-CW;i<CW*2;i+=28){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+CW,CH);ctx.stroke();} ctx.restore();
+  ctx.fillStyle = '#9e6638'; ctx.beginPath(); ctx.moveTo(p.home.x,p.home.y); ctx.lineTo(p.first.x,p.first.y); ctx.lineTo(p.second.x,p.second.y); ctx.lineTo(p.third.x,p.third.y); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#e8edf5'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(p.home.x,p.home.y); ctx.lineTo(p.first.x,p.first.y); ctx.lineTo(p.second.x,p.second.y); ctx.lineTo(p.third.x,p.third.y); ctx.closePath(); ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.55)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(p.home.x,p.home.y); ctx.lineTo(10,CH*.20); ctx.moveTo(p.home.x,p.home.y); ctx.lineTo(CW-10,CH*.20); ctx.stroke();
+  ctx.fillStyle='#a86f3e'; ctx.beginPath(); ctx.arc(p.mound.x,p.mound.y,24,0,Math.PI*2); ctx.fill();
+  drawBase(p.first); drawBase(p.second); drawBase(p.third); drawPlate(p.home);
+  ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(p.home.x,p.home.y,CH*.58,Math.PI*1.12,Math.PI*1.88); ctx.stroke();
+  ctx.fillStyle='rgba(7,27,58,.84)'; ctx.beginPath(); ctx.roundRect(CW*.32, CH*.89, CW*.36, 34, 16); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='900 12px system-ui'; ctx.textAlign='center'; ctx.fillText('COUNCIL GROVE BRAVES', CW*.5, CH*.91);
+}
+function drawBase(pt){ctx.save();ctx.translate(pt.x,pt.y);ctx.rotate(Math.PI/4);ctx.fillStyle='#f7f9fc';ctx.strokeStyle='#cfd7e3';ctx.lineWidth=2;ctx.fillRect(-8,-8,16,16);ctx.strokeRect(-8,-8,16,16);ctx.restore();}
+function drawPlate(pt){ctx.fillStyle='#f7f9fc';ctx.beginPath();ctx.moveTo(pt.x-11,pt.y-7);ctx.lineTo(pt.x+11,pt.y-7);ctx.lineTo(pt.x+9,pt.y+6);ctx.lineTo(pt.x,pt.y+13);ctx.lineTo(pt.x-9,pt.y+6);ctx.closePath();ctx.fill();}
+function drawFielders(){
+  if((game.mode === 'userFielding' || game.mode === 'aiFielding') && game.fielders && game.fielders.length){
+    for(const f of game.fielders){
+      ctx.beginPath();ctx.fillStyle=f.selected?'#fff':'#071b3a';ctx.strokeStyle=f.selected?'#c62828':'#cfd7e3';ctx.lineWidth=f.selected?4:2;ctx.arc(f.x,f.y,f.selected?14:11,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.fillStyle=f.selected?'#071b3a':'#fff';ctx.font='900 9px system-ui';ctx.textAlign='center';ctx.fillText(f.role,f.x,f.y+3);
+      if(f.selected && game.ball){ctx.strokeStyle='rgba(255,255,255,.32)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.lineTo(game.ball.x,game.ball.y);ctx.stroke();ctx.setLineDash([]);}
+    }
+  }else{
+    const p = fieldPos();
+    const spots = [p.p,p.c,p.fb,p.sb,p.tb,p.ss,p.lf,p.cf,p.rf];
+    ctx.globalAlpha=.84;
+    spots.forEach((s,i)=>{ctx.beginPath();ctx.fillStyle='#071b3a';ctx.strokeStyle='#cfd7e3';ctx.lineWidth=1.5;ctx.arc(s.x,s.y,10,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#fff';ctx.font='800 7px system-ui';ctx.textAlign='center';ctx.fillText(ROLES[i],s.x,s.y+2);});
+    ctx.globalAlpha=1;
+  }
+}
+function drawRunners(){
+  const p = fieldPos();
+  game.bases.forEach((r,i)=>{ if(!r)return; const bp=posForBase(i+1); ctx.beginPath();ctx.fillStyle=r.team.isUser?'#e8edf5':'#c62828';ctx.strokeStyle='#071b3a';ctx.lineWidth=3;ctx.arc(bp.x,bp.y-18,10,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle=r.team.isUser?'#071b3a':'#fff';ctx.font='900 8px system-ui';ctx.textAlign='center';ctx.fillText(r.player.number,bp.x,bp.y-15); });
+  if(game.mode === 'userFielding' || game.mode === 'aiFielding'){
+    for(const r of game.activeRunners){
+      if(r.out) continue;
+      ctx.beginPath();ctx.fillStyle=r.team.isUser?'#e8edf5':'#c62828';ctx.strokeStyle='#061327';ctx.lineWidth=2;ctx.arc(r.x,r.y,9,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.fillStyle=r.team.isUser?'#061327':'#fff';ctx.font='900 7px system-ui';ctx.textAlign='center';ctx.fillText(r.player.number,r.x,r.y+2);
+    }
+  }
+  // Batter marker at plate.
+  if(game.currentBatter){
+    ctx.beginPath();ctx.fillStyle=battingTeam().isUser?'#e8edf5':'#c62828';ctx.strokeStyle='#061327';ctx.lineWidth=2;ctx.arc(p.home.x + (battingTeam().isUser?-24:24),p.home.y-2,10,0,Math.PI*2);ctx.fill();ctx.stroke();
+  }
+}
+function drawPitch(){
+  const pitch = game.pitch; if(!pitch) return;
+  const zone = strikeZoneCanvas();
+  const src = inPitchView() ? pitchViewPos().pitcher : fieldPos().mound;
+  const sx = src.x, sy = src.y;
+  const tx = zone.cx + pitch.actual.x * zone.w/2;
+  const ty = zone.cy + pitch.actual.y * zone.h/2;
+  const pr = pitch.progress;
+  const ease = pr < .5 ? 2*pr*pr : 1 - Math.pow(-2*pr+2,2)/2;
+  const x = sx + (tx-sx)*ease;
+  const y = sy + (ty-sy)*ease;
+  const ballSize = inPitchView() ? 7 + pr*23 : 7 + pr*3;
+  if(pitch.trail){
+    pitch.trail.push({x,y,r:ballSize,t:performance.now()});
+    if(pitch.trail.length > 11) pitch.trail.shift();
+  }
+  ctx.save();
+  // Clear arcing flight path and ball trail so the pitch feels physical instead of instant.
+  if(inPitchView()){
+    ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=2;ctx.setLineDash([5,7]);
+    ctx.beginPath();ctx.moveTo(sx,sy);ctx.quadraticCurveTo((sx+tx)/2,Math.min(sy,ty)-22,tx,ty);ctx.stroke();ctx.setLineDash([]);
+  }
+  if(pitch.trail){
+    pitch.trail.forEach((pt,i)=>{ctx.globalAlpha=(i+1)/pitch.trail.length*.18;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(pt.x,pt.y,Math.max(2,pt.r*.42),0,Math.PI*2);ctx.fill();});
+    ctx.globalAlpha=1;
+  }
+  ctx.fillStyle='rgba(0,0,0,.22)'; ctx.beginPath(); ctx.ellipse(x+3,y+ballSize*.7,ballSize*.75,ballSize*.28,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#fff';ctx.strokeStyle='#b21f2d';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,ballSize,0,Math.PI*2);ctx.fill();ctx.stroke();
+  // Simple rotating seam marks.
+  const spin = (pitch.spin || 0) + pr*Math.PI*5;
+  ctx.strokeStyle='#b21f2d'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.arc(x - Math.cos(spin)*ballSize*.22, y, ballSize*.45, -1.1, 1.1); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x + Math.cos(spin)*ballSize*.22, y, ballSize*.45, Math.PI-1.1, Math.PI+1.1); ctx.stroke();
+  ctx.restore();
+}
+function strikeZoneCanvas(){
+  if(inPitchView()){ const z = pitchViewPos().zone; return {...z}; }
+  const p=fieldPos(); return {cx:p.home.x, cy:p.home.y-38, w:78, h:94};
+}
+function drawOverlayHints(){
+  const z = strikeZoneCanvas();
+  if(game.mode === 'userPitching' || game.mode === 'userPitchDelivered' || game.mode === 'userBatting'){
+    ctx.save();ctx.fillStyle='rgba(255,255,255,.10)';ctx.beginPath();ctx.roundRect(z.cx-z.w/2,z.cy-z.h/2,z.w,z.h,10);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=3.5;ctx.strokeRect(z.cx-z.w/2,z.cy-z.h/2,z.w,z.h);ctx.fillStyle='rgba(7,27,58,.72)';ctx.beginPath();ctx.roundRect(z.cx-48,z.cy-z.h/2-20,96,18,9);ctx.fill();ctx.fillStyle='#fff';ctx.font='900 9px system-ui';ctx.textAlign='center';ctx.fillText('STRIKE ZONE',z.cx,z.cy-z.h/2-7);ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(z.cx-z.w/6,z.cy-z.h/2);ctx.lineTo(z.cx-z.w/6,z.cy+z.h/2);ctx.moveTo(z.cx+z.w/6,z.cy-z.h/2);ctx.lineTo(z.cx+z.w/6,z.cy+z.h/2);ctx.moveTo(z.cx-z.w/2,z.cy-z.h/6);ctx.lineTo(z.cx+z.w/2,z.cy-z.h/6);ctx.moveTo(z.cx-z.w/2,z.cy+z.h/6);ctx.lineTo(z.cx+z.w/2,z.cy+z.h/6);ctx.stroke();
+    if(game.mode==='userPitching'){
+      const tx = z.cx + game.target.x*z.w/2, ty = z.cy + game.target.y*z.h/2;
+      ctx.fillStyle='#fff'; ctx.strokeStyle='#c62828'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(tx,ty,9,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle='rgba(7,27,58,.82)'; ctx.beginPath(); ctx.roundRect(z.cx-70,z.cy-z.h/2-38,140,24,12); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.font='900 11px system-ui'; ctx.textAlign='center'; ctx.fillText('TAP TARGET • RELEASE METER',z.cx,z.cy-z.h/2-22);
+    }
+    if(game.mode==='userBatting' && game.pitch){
+      const barW = Math.min(190,CW*.55), barX = z.cx-barW/2, barY = z.cy+z.h/2+18;
+      ctx.fillStyle='rgba(7,27,58,.74)'; ctx.beginPath(); ctx.roundRect(barX-8,barY-8,barW+16,44,15); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.18)';ctx.beginPath();ctx.roundRect(barX,barY,barW,10,5);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.58)';ctx.fillRect(barX+barW*.70,barY,barW*.24,10);
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(barX + barW*game.pitch.progress, barY+5, 8, 0, Math.PI*2);ctx.fill();
+      const swingNow = game.pitch.progress >= .70 && game.pitch.progress <= .94;
+      ctx.fillStyle=swingNow?'#fff':'rgba(255,255,255,.72)'; ctx.font=swingNow?'1000 18px system-ui':'900 12px system-ui'; ctx.textAlign='center';
+      ctx.fillText(swingNow?'SWING NOW':'TRACK THE BALL',z.cx,barY+32);
+    }
+    ctx.restore();
+  }
+}
+function drawBall(){
+  const b = game.ball; if(!b) return;
+  ctx.beginPath();ctx.fillStyle='#fff';ctx.strokeStyle='#c62828';ctx.lineWidth=2;ctx.arc(b.x,b.y,7,0,Math.PI*2);ctx.fill();ctx.stroke();
+  if(b.type === 'homeRun' && b.progress > .75){ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='900 16px system-ui';ctx.textAlign='center';ctx.fillText('BACK! BACK!', CW*.5, CH*.22);}
+}
+function drawThrow(){
+  if(game.throw){
+    ctx.save();ctx.strokeStyle='rgba(255,255,255,.4)';ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(game.throw.fromX,game.throw.fromY);ctx.lineTo(game.throw.toX,game.throw.toY);ctx.stroke();ctx.restore();
+  }
+}
+
+function setAim(value){
+  game.aim = Number(value);
+  $$('.aim-btn').forEach(b=>b.classList.toggle('selected', Number(b.dataset.aim)===game.aim));
+}
+function updateTargetFromEvent(e){
+  const rect = $('#targetZone').getBoundingClientRect();
+  const x = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+  const y = clamp((e.clientY - rect.top) / rect.height, 0, 1);
+  game.target.x = (x-.5)*2;
+  game.target.y = (y-.5)*2;
+  $('#targetDot').style.left = `${x*100}%`;
+  $('#targetDot').style.top = `${y*100}%`;
+}
+function setupEvents(){
+  $$('[data-go]').forEach(b=>b.addEventListener('click',()=>showScreen(b.dataset.go)));
+  $('#quickPlayBtn').addEventListener('click',()=>startGame(selectedSchedule || SCHEDULE[0]));
+  $('#rematchBtn').addEventListener('click',()=>startGame(selectedSchedule));
+  $('#fictionRosterBtn').addEventListener('click',()=>{settings.fictionalize=!settings.fictionalize;renderRosters();});
+  $('#fictionToggle').addEventListener('click',()=>{settings.fictionalize=!settings.fictionalize;renderSettings();});
+  $('#soundToggle').addEventListener('click',()=>{settings.sound=!settings.sound;renderSettings();beep('tap');});
+  $('#inningsSelect').addEventListener('change',e=>settings.innings=Number(e.target.value));
+  $('#difficultySelect').addEventListener('change',e=>settings.difficulty=e.target.value);
+  $$('.pitch-type').forEach(b=>b.addEventListener('click',()=>{game.selectedPitch=b.dataset.pitch;$$('.pitch-type').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');setLog(`${game.selectedPitch} selected.`);}));
+  $('#meterBtn').addEventListener('click',releaseUserPitch);
+  $('#targetZone').addEventListener('pointerdown',e=>{if(game) updateTargetFromEvent(e);});
+  $('#targetZone').addEventListener('pointermove',e=>{if(game && e.buttons) updateTargetFromEvent(e);});
+  $('#contactBtn').addEventListener('click',()=>handleSwing('contact'));
+  $('#buntBtn').addEventListener('click',()=>handleSwing('bunt'));
+  $('#powerBtn').addEventListener('pointerdown',e=>{ if(!game) return; game.powerCharging=true; game.powerStart=performance.now(); game.powerCharge=0; $('#chargeBar').classList.add('active'); $('#powerBtn').setPointerCapture?.(e.pointerId); });
+  $('#powerBtn').addEventListener('pointerup',()=>handleSwing('power'));
+  $('#powerBtn').addEventListener('pointercancel',()=>{ if(game){game.powerCharging=false;$('#chargeBar').classList.remove('active');} });
+  canvas.addEventListener('pointerdown',()=>{ if(game && game.mode==='userBatting' && game.pitch) handleSwing('contact'); });
+  $$('.aim-btn').forEach(b=>b.addEventListener('click',()=>setAim(b.dataset.aim)));
+  $('#advanceBtn').addEventListener('click',()=>{if(game){game.baseCommand='advance';setLog('Runners are pushing for extra bases.');}});
+  $('#holdBtn').addEventListener('click',()=>{if(game){game.baseCommand='hold';setLog('Runners holding safe.');}});
+  $('#retreatBtn').addEventListener('click',()=>{if(game){game.baseCommand='retreat';setLog('Runners retreating/playing safe.');}});
+  $('#stealBtn').addEventListener('click',()=>{if(game){game.stealQueued=true;setLog('Steal queued. Runner will break with the pitch.');}});
+  $$('[data-throw]').forEach(b=>b.addEventListener('click',()=>throwTo(Number(b.dataset.throw))));
+  $$('[data-pickoff]').forEach(b=>b.addEventListener('click',()=>pickoff(Number(b.dataset.pickoff))));
+  $('#cutoffBtn').addEventListener('click',()=>{if(game && game.selectedFielder && game.selectedFielder.hasBall){setLog('Cutoff held the ball. Runners freeze if late.');resolveFieldingPlay('settle');}});
+  $('#diveBtn').addEventListener('click',()=>{if(game && game.mode==='userFielding'){game.fieldPlay.diveBoost=120;setLog('Dive burst!');}});
+  setupJoystick();
+  window.addEventListener('resize',resizeCanvas);
+}
+function setupJoystick(){
+  const joy = $('#joystick'), stick = $('#stick');
+  let activeId = null;
+  function move(e){
+    if(activeId !== e.pointerId || !game) return;
+    const rect = joy.getBoundingClientRect();
+    const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+    let dx = e.clientX - cx, dy = e.clientY - cy;
+    const max = rect.width*.31; const len = Math.hypot(dx,dy);
+    if(len > max){ dx = dx/len*max; dy = dy/len*max; }
+    stick.style.transform = `translate(${dx}px,${dy}px)`;
+    game.joystick.x = dx/max; game.joystick.y = dy/max; game.joystick.active = true;
+  }
+  function end(e){
+    if(activeId !== e.pointerId || !game) return;
+    activeId = null; stick.style.transform = 'translate(0,0)'; game.joystick={x:0,y:0,active:false};
+  }
+  joy.addEventListener('pointerdown',e=>{activeId=e.pointerId; joy.setPointerCapture?.(e.pointerId); move(e);});
+  joy.addEventListener('pointermove',move); joy.addEventListener('pointerup',end); joy.addEventListener('pointercancel',end);
+}
+
+setupEvents();
+renderSchedule();
+renderRosters();
+renderSettings();
+resizeCanvas();
+
+})();
+</script>
+</body>
+</html>
